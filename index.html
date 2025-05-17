@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Corazón animado</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    p {
+      margin-top: 20px;
+      font-size: 3.2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <p><strong>Después de meses sin señales de vida</strong></p>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    // Ajustar tamaño del canvas al tamaño de la ventana
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight * 0.7; // un poco menos que toda la altura
+    }
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    function drawHeart(x, y, size, color) {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.bezierCurveTo(x - size / 2, y - size / 2, x - size, y + size / 3, x, y + size);
+      ctx.bezierCurveTo(x + size, y + size / 3, x + size / 2, y - size / 2, x, y);
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+
+    function animate() {
+      let size = 0;
+      const maxSize = Math.min(canvas.width, canvas.height) / 3;
+
+      function frame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawHeart(canvas.width / 2, canvas.height / 2.2, size, "red");
+        size += 2;
+        if (size <= maxSize) {
+          requestAnimationFrame(frame);
+        } else {
+          drawHeart(canvas.width / 2, canvas.height / 2.2, maxSize, "red");
+        }
+      }
+
+      frame();
+    }
+
+    animate();
+  </script>
+</body>
+
+</html>
